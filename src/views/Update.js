@@ -12,6 +12,8 @@ const Update = (props) => {
     const { id } = useParams();
     const [author, setAuthor] = useState();
     const [loaded, setLoaded] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [errors, setErrors] = useState([]);
 
 
     useEffect(() => {
@@ -26,24 +28,41 @@ const Update = (props) => {
 
     const updateAuthor = author => {
         axios.put('http://localhost:8000/api/author/' + id, author)
-            .then(res => console.log(res))
-            .catch(err => console.log(err));
+            .then(res => {
+                console.log(res)
+                if (isError === false) {
+                    setAuthor(author);
+                    history.push("/");
+                }
+            })
+            .catch(err => {
+                console.log("ERROR:", err)
+                const errorResponse = err.response.data.errors; // Get the errors from err.response.data
+                const errorArr = []; // Define a temp error array to push the messages in
+                for (const key of Object.keys(errorResponse)) { // Loop through all errors and get the messages
+                    errorArr.push(errorResponse[key].message)
+                }
+                // Set Errors
+                setErrors(errorArr);
+                setIsError(true);
+            });
     }
 
     return (
         <div className='d-flex flex-column justify-content-center align-items-center'>
             <h1>Favorite Authors</h1>
-            <hr/>
+            <hr />
             <h3>Update Author</h3>
             {loaded && (
-                    <AuthorForm
-                        onSubmitProp={updateAuthor}
-                        initialFirstName={author.firstName}
-                        initialLastName={author.lastName}
-                    />
+                <AuthorForm
+                    onSubmitProp={updateAuthor}
+                    initialFirstName={author.firstName}
+                    initialLastName={author.lastName}
+                />
             )}
-            <hr/>
-            <Link to = '/'>Home</Link>
+            {errors.map((err, index) => <p key={index}>{err}</p>)}
+            <hr />
+            <Link to='/'>Home</Link>
         </div>
     )
 }
