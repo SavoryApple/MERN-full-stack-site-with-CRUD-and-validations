@@ -14,7 +14,7 @@ export default props => {
     }
 
     return (
-        <button className='btn btn-danger' onClick={deleteAuthor}>
+        <button className='btn btn-danger btn-sm' onClick={deleteAuthor}>
             Delete
         </button>
     )

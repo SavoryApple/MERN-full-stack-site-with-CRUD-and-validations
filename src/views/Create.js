@@ -13,7 +13,8 @@ const Create = (props) => {
     const { id } = useParams();
     const [author, setAuthor] = useState();
     const [loaded, setLoaded] = useState(false);
-    const [errors, setErrors] = useState([]); 
+    const [errors, setErrors] = useState([]);
+    const [isError, setIsError] = useState(false);
 
 
     useEffect(() => {
@@ -29,10 +30,13 @@ const Create = (props) => {
     const createAuthor = author => {
         axios.post('http://localhost:8000/api/author/create', author)
             .then(res => {
-                setAuthor(author);
+                if (isError === false) {
+                    setAuthor(author);
+                    history.push("/");
+                }
             })
             .catch(err => {
-                console.log("ERRE:", err)
+                console.log("ERROR:", err)
                 const errorResponse = err.response.data.errors; // Get the errors from err.response.data
                 const errorArr = []; // Define a temp error array to push the messages in
                 for (const key of Object.keys(errorResponse)) { // Loop through all errors and get the messages
@@ -40,9 +44,9 @@ const Create = (props) => {
                 }
                 // Set Errors
                 setErrors(errorArr);
+                setIsError(true);
             });
-            history.push("/");
-    }
+        }
 
     return (
         <div className='d-flex flex-column justify-content-center align-items-center'>
@@ -53,8 +57,8 @@ const Create = (props) => {
                 onSubmitProp={createAuthor}
                 initialFirstName=""
                 initialLastName=""
-                />
-                {errors.map((err, index) => <p key={index}>{err}</p>)}
+            />
+            {errors.map((err, index) => <p key={index}>{err}</p>)}
             <hr />
             <Link to='/'>Home</Link>
         </div>
