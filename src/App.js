@@ -5,11 +5,9 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Main from './views/Main';
-import Detail from './views/Create';
+import AuthorList from './components/AuthorList';
 import Update from './views/Update';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import AuthorList from './components/AuthorList';
 import Create from './views/Create';
 
 function App() {
@@ -24,7 +22,7 @@ function App() {
           <Update />
         </Route>
         <Route exact path="/">
-          <Main />
+          <AuthorList />
         </Route>
       </div>
     </BrowserRouter>

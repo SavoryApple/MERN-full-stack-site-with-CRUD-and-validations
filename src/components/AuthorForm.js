@@ -5,20 +5,23 @@ import {
 } from "react-router-dom";
 
 export default props => {
-    const { initialFirstName, initialLastName, onSubmitProp } = props;
-    //keep track of what is being typed via useState hook
+    const { initialFirstName, initialLastName, initialBreed, initialIsImportant, onSubmitProp } = props;
     const [firstName, setFirstName] = useState(initialFirstName);
     const [lastName, setLastName] = useState(initialLastName);
+    const [breed, setBreed] = useState(initialBreed);
+    const [isImportant, setIsImportant] = useState(initialIsImportant);
     //handler when the form is submitted
     const onSubmitHandler = e => {
         //prevent default behavior of the submit
         e.preventDefault();
-        onSubmitProp({ firstName, lastName });
+        // console.log(firstName, lastName, breed, checkbox)
+        onSubmitProp({ firstName, lastName, breed, isImportant });
     }
 
     //onChange to update firstName and lastName
     return (
         <div>
+            <hr></hr>
             <form onSubmit={onSubmitHandler}>
                 <p>
                     <label>First Name</label><br />
@@ -29,7 +32,21 @@ export default props => {
                     <input type="text" onChange={(e) => setLastName(e.target.value)} value={lastName} />
                 </p>
                 <div className='d-flex flex-row justify-content-between'>
-                    <input type="submit" />
+                    <select onChange={(e) => setBreed(e.target.value)} name="search" id="search" value={breed}>
+                        <option value="choose">Choose...</option>
+                        <option value="Human">Human</option>
+                        <option value="Alien">Alien</option>
+                    </select>
+                    <div className="form-check">
+                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                            <input onChange={(e) => setIsImportant(e.target.checked)} className="form-check-input" type="checkbox" checked={isImportant} id="flexCheckDefault" />
+                            Important
+                        </label>
+                    </div>
+                </div>
+                <hr />
+                <div className='d-flex flex-row justify-content-between'>
+                    <input className='btn btn-primary' type="submit" />
                     <Link to='/' className='btn btn-danger' >Cancel</Link>
                 </div>
             </form>

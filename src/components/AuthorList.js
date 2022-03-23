@@ -8,7 +8,8 @@ const AuthorList = (props) => {
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/authors')
-            .then(res => setAuthors(res.data.authorList));
+            .then(res => setAuthors(res.data.authorList))
+            .catch(err => console.log(err));
     }, [])
 
     const removeFromDom = authorId => {
@@ -16,39 +17,53 @@ const AuthorList = (props) => {
     }
 
     return (
-        <div className='container' >
+        <div className=' d-flex flex-column align-items-center' >
             <h1>Favorite Authors</h1>
             <Link to ={"/new"}>
                 <p>Add an author</p>
             </Link>
             <p>We have quotes by:</p>
-            <table className='table'>
+            <table className='table w-50'>
                 <thead className='thead-dark'>
-                    <tr>
+                    <tr className=''> 
                         <th scope='col'>First</th>
                         <th scope='col'>Last</th>
                         <th scope='col'>Actions</th>
+                        <th scope='col'>Breed</th>
+                        <th scope='col'>Important?</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {authors.map((author, idx) => {
-                        return (
-                            <tr key={idx} className='d-flex flex-row'>
-                                <td className='d-flex flex-row align-items-center justify-content-center'>
+                    {authors.map((author, idx) => 
+                    // {
+                        // return (
+                            <tr key={idx} >
+                                <td >
                                     {author.firstName}
                                 </td>
-                                <td className='d-flex flex-row align-items-center justify-content-center'>
+                                <td >
                                     {author.lastName}
                                 </td>
-                                <td className='d-flex flex-row align-items-center justify-content-center gap-2'>
-                                    <Link to={"/author/" + author._id + "/edit"}>
-                                        Edit
-                                    </Link>
+                                <td>
+                                    <Link className='mb-5' to={"/author/" + author._id + "/edit"}>Edit</Link>
+                                    &nbsp;&nbsp;
                                     <DeleteButton authorId={author._id} successCallback={() => removeFromDom(author._id)} />
                                 </td>
+                                <td>
+                                    {author.breed}
+                                </td>
+                                <td>
+                                    {
+                                    author.isImportant == true?
+                                    <p>🌟</p>
+                                    :
+                                    <></>
+                                    }
+                                </td>
                             </tr>
-                        )
-                    })}
+                        // )
+                    // }
+                    )}
                 </tbody>
             </table>
 

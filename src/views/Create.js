@@ -14,14 +14,12 @@ const Create = (props) => {
     const [author, setAuthor] = useState();
     const [loaded, setLoaded] = useState(false);
     const [errors, setErrors] = useState([]);
-    const [isError, setIsError] = useState(false);
 
 
     useEffect(() => {
         axios.get('http://localhost:8000/api/author/' + id)
             .then(res => {
                 setAuthor(res.data);
-
                 setLoaded(true);
             })
             .catch(err => console.log(err));
@@ -30,10 +28,8 @@ const Create = (props) => {
     const createAuthor = author => {
         axios.post('http://localhost:8000/api/author/create', author)
             .then(res => {
-                if (isError === false) {
-                    setAuthor(author);
-                    history.push("/");
-                }
+                console.log("created user response:", res.data)
+                history.push("/");
             })
             .catch(err => {
                 console.log("ERROR:", err)
@@ -44,9 +40,9 @@ const Create = (props) => {
                 }
                 // Set Errors
                 setErrors(errorArr);
-                setIsError(true);
+                
             });
-        }
+    }
 
     return (
         <div className='d-flex flex-column justify-content-center align-items-center'>
@@ -57,6 +53,8 @@ const Create = (props) => {
                 onSubmitProp={createAuthor}
                 initialFirstName=""
                 initialLastName=""
+                initialBreed="choose"
+                initialIsImportant={false}
             />
             {errors.map((err, index) => <p key={index}>{err}</p>)}
             <hr />
