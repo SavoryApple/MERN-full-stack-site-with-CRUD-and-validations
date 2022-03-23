@@ -20,7 +20,6 @@ const Update = (props) => {
         axios.get('http://localhost:8000/api/author/' + id)
             .then(res => {
                 setAuthor(res.data);
-
                 setLoaded(true);
             })
             .catch(err => console.log(err));
@@ -30,10 +29,8 @@ const Update = (props) => {
         axios.put('http://localhost:8000/api/author/' + id, author)
             .then(res => {
                 console.log(res)
-                if (isError === false) {
-                    setAuthor(author);
-                    history.push("/");
-                }
+                setAuthor(author);
+                history.push("/");
             })
             .catch(err => {
                 console.log("ERROR:", err)
@@ -58,6 +55,8 @@ const Update = (props) => {
                     onSubmitProp={updateAuthor}
                     initialFirstName={author.firstName}
                     initialLastName={author.lastName}
+                    initialBreed={author.breed}
+                    initialIsImportant={author.isImportant}
                 />
             )}
             {errors.map((err, index) => <p key={index}>{err}</p>)}
